@@ -18,15 +18,15 @@ class TaxonomyTestCase(BaseCase):
     @classmethod
     def setup_users(cls):
         CreateTestData.create_users([{
-            u'name': u'sysadmin',
-            u'fullname': u'Test Sysadmin',
-            u'password': u'pass',
-            u'sysadmin': True
+            'name': 'sysadmin',
+            'fullname': 'Test Sysadmin',
+            'password': 'pass',
+            'sysadmin': True
         }, {
-            u'name': u'test',
-            u'fullname': u'Test user',
-            u'password': u'pass',
-            u'sysadmin': False
+            'name': 'test',
+            'fullname': 'Test user',
+            'password': 'pass',
+            'sysadmin': False
         }])
         cls.sysadmin_context = {'user': 'sysadmin', 'model': model}
         cls.normal_context = {'user': 'test', 'model': model}
@@ -38,13 +38,13 @@ class TaxonomyTestCase(BaseCase):
             return
 
         cls.taxonomies = [{
-            u'name': u'taxonomy-one',
-            u'title': u'Taxonomy One',
-            u'uri': u'http://localhost.local/taxonomy-one'
+            'name': 'taxonomy-one',
+            'title': 'Taxonomy One',
+            'uri': 'http://localhost.local/taxonomy-one'
         }, {
-            u'name': u'taxonomy-two',
-            u'title': u'Taxonomy Two',
-            u'uri': u'http://localhost.local/taxonomy-two'
+            'name': 'taxonomy-two',
+            'title': 'Taxonomy Two',
+            'uri': 'http://localhost.local/taxonomy-two'
         }]
         for t in cls.taxonomies:
             tx = Taxonomy(**t)

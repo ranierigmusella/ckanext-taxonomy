@@ -88,7 +88,7 @@ def load_terms_and_extras(filepath, taxonomy_name, taxonomy_title=None):
 
     for term_from_file in term_list:
         term_name = term_from_file['title']
-        extras = dict(((k, v) for k, v in term_from_file.items()
+        extras = dict(((k, v) for k, v in list(term_from_file.items())
                        if k not in ('title', 'description', 'stored_as')))
         term = dict(taxonomy_id=taxonomy['id'],
                     label=term_name,

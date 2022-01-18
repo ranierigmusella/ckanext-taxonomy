@@ -15,6 +15,7 @@ import ckan.logic as logic
 
 from ckan.lib.munge import munge_name
 from ckanext.taxonomy.models import Taxonomy, TaxonomyTerm
+from functools import reduce
 
 _check_access = logic.check_access
 
@@ -149,7 +150,7 @@ def taxonomy_delete(context, data_dict):
 
     terms = model.Session.query(TaxonomyTerm)\
         .filter(TaxonomyTerm.taxonomy == taxonomy)
-    map(model.Session.delete, terms.all())
+    list(map(model.Session.delete, terms.all()))
 
     model.Session.delete(taxonomy)
     model.Session.commit()
@@ -337,7 +338,7 @@ def taxonomy_term_delete(context, data_dict):
         filter(TaxonomyTerm.id.in_(ids))
 
     if len(ids):
-        map(model.Session.delete, todelete)
+        list(map(model.Session.delete, todelete))
         model.Session.commit()
 
     return term
@@ -348,7 +349,7 @@ def _gather(d, key):
     Gather the values in d making sure we navigate down all 'children' nodes
     """
     res = []
-    for k, v in d.iteritems():
+    for k, v in d.items():
         if k == key:
             res.append([v])
         if k == 'children':

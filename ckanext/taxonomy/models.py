@@ -20,7 +20,7 @@ metadata = MetaData()
 
 
 def make_uuid():
-    return unicode(uuid.uuid4())
+    return str(uuid.uuid4())
 
 
 class Taxonomy(Base):
@@ -35,7 +35,7 @@ class Taxonomy(Base):
     uri = Column(types.UnicodeText)
 
     def __init__(self, **kwargs):
-        for k, v in kwargs.items():
+        for k, v in list(kwargs.items()):
             setattr(self, k, v)
 
     @classmethod
@@ -61,7 +61,7 @@ class Taxonomy(Base):
         }
 
     def __repr__(self):
-        return u"<Taxonomy: %s>" % (self.name)
+        return "<Taxonomy: %s>" % (self.name)
 
 
 class TaxonomyTerm(Base):
@@ -91,7 +91,7 @@ class TaxonomyTerm(Base):
 
 
     def __init__(self, **kwargs):
-        for k, v in kwargs.items():
+        for k, v in list(kwargs.items()):
             setattr(self, k, v)
 
     @classmethod
@@ -124,7 +124,7 @@ class TaxonomyTerm(Base):
         return d
 
     def __repr__(self):
-        return u"<Taxonomy Term: %s>" % (self.label)
+        return "<Taxonomy Term: %s>" % (self.label)
 
 
 def init_tables():

@@ -20,7 +20,7 @@ setup(
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['ckanext', 'ckanext.taxonomy'],
     install_requires=[
-        'rdflib==4.1.2',
+        'rdflib==4.2.1',
         'python-skos==0.1.1'
     ],
     dependency_links=[

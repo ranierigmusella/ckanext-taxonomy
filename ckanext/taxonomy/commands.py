@@ -65,7 +65,9 @@ class TaxonomyCommand(cli.CkanCommand):
         if cmd == 'load':
             self.load()
         elif cmd == 'load-extras':
-            self.load_extras()
+            filename = self.options.filename
+            name = self.options.name
+            self.load_extras(filename, name)
         elif cmd == 'init':
             self.init()
         elif cmd == 'cleanup':
@@ -143,7 +145,7 @@ class TaxonomyCommand(cli.CkanCommand):
             self._add_node(tx, t)
         print('Load complete')
 
-    def load_extras(self):
+    def load_extras(self, filename, name):
         '''
         Load extra information about the terms in the taxonomy
 
@@ -166,18 +168,18 @@ class TaxonomyCommand(cli.CkanCommand):
         'stored_as' are also removed from the object before storing it in the
         JSON extras field.
         '''
-        if not self.options.filename:
+        if not filename:
             print("No FILENAME provided and it is required")
             print(self.usage)
             return
 
-        if not self.options.name:
+        if not name:
             print("No NAME provided and it is required")
             print(self.usage)
             return
 
         from . import lib
-        lib.load_term_extras(self.options.filename, taxonomy_name=self.options.name)
+        lib.load_term_extras(filename, taxonomy_name=name)
         print('Extras loaded')
 
     def _add_node(self, tx, node, parent=None, depth=1):

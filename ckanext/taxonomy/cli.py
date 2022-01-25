@@ -1,5 +1,7 @@
 import sys
 import click
+import rdflib
+import skos
 from logging import getLogger
 
 logger = getLogger(__name__)
@@ -29,6 +31,7 @@ Where:
     URI is a uri for the taxonomy
 """
 
+
 @click.group(short_help='Perform Tag Taxonomy related actions')
 def taxonomy():
     """taxonomy commands
@@ -53,6 +56,95 @@ def cleanup():
     remove_tables()
     logger.info("DB tables removed")
 
+@taxonomy.command()
+@click.argument(u'url')
+@click.argument(u'filename')
+@click.argument(u'name')
+@click.argument(u'title')
+@click.argument(u'lang')
+@click.argument(u'uri')
+def load(url, filename, name, title, lang, uri):
+
+    if not url and not filename:
+        logger.error("No URL or FILENAME provided and one is required")
+        logger.error(usage)
+        return
+
+    if not name:
+        print("No NAME provided and it is required")
+        logger.error(usage)
+        return
+
+    if not uri:
+        logger.error("No URI provided and it is required")
+        logger.error(usage)
+        return
+
+    logger.info("Loading graph")
+    graph = rdflib.Graph()
+    result = graph.parse(url or filename)
+    loader = skos.RDFLoader(graph,
+                            max_depth=float('inf'),
+                            flat=True,
+                            lang=lang)
+
+    logger.info("Processing concepts")
+    concepts = loader.getConcepts()
+
+    top_level = []
+    for _, v in concepts.items():
+        if not v.broader:
+            top_level.append(v)
+    top_level.sort(key=lambda x: x.prefLabel)
+
+    import ckan.model as model
+    import ckan.logic as logic
+
+    context = {'model': model, 'ignore_auth': True }
+
+    try:
+        current = logic.get_action('taxonomy_show')(
+            context,
+            {'id': name})
+        logic.get_action('taxonomy_delete')(
+            context,
+            {'id': name})
+    except logic.NotFound:
+        pass
+
+    tx = logic.get_action('taxonomy_create')(context, {
+        'title': title or name,
+        'name': name,
+        'uri': uri
+    })
+
+    for t in top_level:
+       _add_node(context, tx, t)
+    logger.info('Load complete')
+
+def _add_node(context, tx, node, parent=None, depth = 1):
+    import ckan.logic as logic
+
+    logger.debug('   ' * depth, node.prefLabel.encode('utf-8'))
+
+    description = ''
+    if hasattr(node, 'definition') and node.definition:
+        description = node.definition.encode('utf-8')
+
+    logger.debug(type(node))
+    # rdfs:comment print dir(node)
+
+    nd = logic.get_action('taxonomy_term_create')(context,  {
+        'label': node.prefLabel.encode('utf-8'),
+        'uri': node.uri,
+        'description': description,
+        'taxonomy_id': tx['id'],
+        'parent_id': parent
+    })
+    node_id = nd['id']
+
+    for _, child in node.narrower.items():
+        _add_node(context, tx, child, node_id, depth + 1)
 
 @taxonomy.command()
 @click.argument(u'filename')

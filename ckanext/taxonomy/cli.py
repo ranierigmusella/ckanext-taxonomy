@@ -93,10 +93,14 @@ def load(url, filename, name, title, lang, uri):
     concepts = loader.getConcepts()
 
     top_level = []
+    logger.debug(concepts.items()[0])
+    logger.debug(concepts.items()[0].prefLabel)
     for _, v in concepts.items():
         if not v.broader:
             top_level.append(v)
     top_level.sort(key=lambda x: x.prefLabel)
+    logger.debug(top_level[0])
+    logger.debug(top_level[0].prefLabel)
 
     import ckan.model as model
     import ckan.logic as logic

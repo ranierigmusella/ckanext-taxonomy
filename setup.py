@@ -24,7 +24,7 @@ setup(
         'python-skos==0.1.1'
     ],
     dependency_links=[
-        'git+https://github.com/ranierigmusella/ckanext-taxonomy#egg=python-skos-0.1.1'
+        'git+https://github.com/ranierigmusella/ckanext-taxonomy#egg=python-skos'
     ],
     entry_points= {
 

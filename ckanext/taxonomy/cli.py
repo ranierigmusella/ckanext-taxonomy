@@ -1,7 +1,6 @@
 import sys
 import click
 from logging import getLogger
-from ckanext.taxonomy.commands import TaxonomyCommand
 
 log = getLogger(__name__)
 

@@ -84,23 +84,16 @@ def load(url, filename, name, title, lang, uri):
     logger.info("Loading graph")
     graph = rdflib.Graph()
     result = graph.parse(url or filename)
-    loader = skos.RDFLoader(graph,
-                            max_depth=float('inf'),
-                            flat=True,
-                            lang=lang)
+    loader = skos.RDFLoader(graph, max_depth=float('inf'), flat=True, lang=lang)
 
     logger.info("Processing concepts")
     concepts = loader.getConcepts()
 
     top_level = []
-    logger.debug(concepts.items()[0])
-    logger.debug(concepts.items()[0].prefLabel)
     for _, v in concepts.items():
         if not v.broader:
             top_level.append(v)
     top_level.sort(key=lambda x: x.prefLabel)
-    logger.debug(top_level[0])
-    logger.debug(top_level[0].prefLabel)
 
     import ckan.model as model
     import ckan.logic as logic
@@ -130,17 +123,17 @@ def load(url, filename, name, title, lang, uri):
 def _add_node(context, tx, node, parent=None, depth = 1):
     import ckan.logic as logic
 
-    print('   ' * depth, node.prefLabel.encode('utf-8'))
+    logger.info(('   ' * depth) + node.prefLabel)
 
     description = ''
     if hasattr(node, 'definition') and node.definition:
-        description = node.definition.encode('utf-8')
+        description = node.definition
 
     logger.debug(type(node))
     # rdfs:comment print dir(node)
 
     nd = logic.get_action('taxonomy_term_create')(context,  {
-        'label': node.prefLabel.encode('utf-8'),
+        'label': node.prefLabel,
         'uri': node.uri,
         'description': description,
         'taxonomy_id': tx['id'],

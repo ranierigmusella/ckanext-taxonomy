@@ -57,14 +57,15 @@ def cleanup():
     logger.info("DB tables removed")
 
 @taxonomy.command()
-@click.argument(u'url')
-@click.argument(u'filename')
-@click.argument(u'name')
-@click.argument(u'title')
-@click.argument(u'lang')
-@click.argument(u'uri')
+@click.option('--url'     , is_flag = False, default = False, help = "URL to a resource")
+@click.option('--filename', is_flag = False, default = False, help = "Path to a file")
+@click.option('--name'    , is_flag = False, default = False, help = "Name of the taxonomy to work with")
+@click.option('--title'   , is_flag = False, default = False, help = "Title of the taxonomy")
+@click.option('--lang'    , is_flag = False, default = False, help = "Language to use when retrieving labels")
+@click.option('--uri'     , is_flag = False, default = False, help = "The URI of the taxonomy")
 def load(url, filename, name, title, lang, uri):
-
+    """Load a taxonomy
+    """
     if not url and not filename:
         logger.error("No URL or FILENAME provided and one is required")
         logger.error(usage)
@@ -150,27 +151,7 @@ def _add_node(context, tx, node, parent=None, depth = 1):
 @click.argument(u'filename')
 @click.argument(u'name')
 def load_extras(filename, name):
-    """
-    Load extra information about the terms in the taxonomy
-
-    These are loaded from a JSON file which contains an Array of Objects
-    which have a 'title' key which corresponds to the 'label' of the
-    taxonomy term.
-
-    [{"title": "term1",
-        "extra1", "value2",
-        "extra2", "value2",
-        ...},
-        {"title": "term2",
-        "extra1", "value2",
-        "extra2", "value2",
-        ...}]
-
-    This file format has been adopted from the themes.json file used in
-    data.gov.uk. As well as the 'title', key which is used to match up with
-    the 'label' of the taxonomy term, the keys 'description' and
-    'stored_as' are also removed from the object before storing it in the
-    JSON extras field.
+    """Load extra information about the terms in the taxonomy
     """
     if not filename:
         logger.error("No FILENAME provided and it is required")

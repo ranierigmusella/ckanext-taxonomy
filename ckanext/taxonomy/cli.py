@@ -2,7 +2,7 @@ import sys
 import click
 from logging import getLogger
 
-log = getLogger(__name__)
+logger = getLogger(__name__)
 
 # Click commands for CKAN 2.9 and above
 
@@ -42,6 +42,7 @@ def init():
     """
     from ckanext.taxonomy.models import init_tables
     init_tables()
+    logger.info("DB tables created")
 
 
 @taxonomy.command()
@@ -50,6 +51,7 @@ def cleanup():
     """
     from ckanext.taxonomy.models import remove_tables
     remove_tables()
+    logger.info("DB tables removed")
 
 
 @taxonomy.command()
@@ -79,18 +81,18 @@ def load_extras(filename, name):
     JSON extras field.
     """
     if not filename:
-        log.error("No FILENAME provided and it is required")
-        log.error(usage)
+        logger.error("No FILENAME provided and it is required")
+        logger.error(usage)
         return
 
     if not name:
-        log.error("No NAME provided and it is required")
-        log.error(usage)
+        logger.error("No NAME provided and it is required")
+        logger.error(usage)
         return
 
     from . import lib
     lib.load_term_extras(filename, taxonomy_name=name)
-    log.info('Extras loaded')
+    logger.info('Extras loaded')
 
 
 def get_commands():

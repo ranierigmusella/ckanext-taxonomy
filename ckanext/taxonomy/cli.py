@@ -126,7 +126,7 @@ def load(url, filename, name, title, lang, uri):
 def _add_node(context, tx, node, parent=None, depth = 1):
     import ckan.logic as logic
 
-    logger.debug(('   ' * depth) + node.prefLabel.encode('utf-8'))
+    print('   ' * depth, node.prefLabel.encode('utf-8'))
 
     description = ''
     if hasattr(node, 'definition') and node.definition:

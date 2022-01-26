@@ -57,12 +57,12 @@ def cleanup():
     logger.info("DB tables removed")
 
 @taxonomy.command()
-@click.option('--url'     , is_flag = False, default = False, help = "URL to a resource")
-@click.option('--filename', is_flag = False, default = False, help = "Path to a file")
-@click.option('--name'    , is_flag = False, default = False, help = "Name of the taxonomy to work with")
-@click.option('--title'   , is_flag = False, default = False, help = "Title of the taxonomy")
-@click.option('--lang'    , is_flag = False, default = False, help = "Language to use when retrieving labels")
-@click.option('--uri'     , is_flag = False, default = False, help = "The URI of the taxonomy")
+@click.option('--url'     , is_flag = False, default = None, help = "URL to a resource")
+@click.option('--filename', is_flag = False, default = None, help = "Path to a file")
+@click.option('--name'    , is_flag = False, default = None, help = "Name of the taxonomy to work with")
+@click.option('--title'   , is_flag = False, default = None, help = "Title of the taxonomy")
+@click.option('--lang'    , is_flag = False, default = 'en', help = "Language to use when retrieving labels")
+@click.option('--uri'     , is_flag = False, default = None, help = "The URI of the taxonomy", required = True)
 def load(url, filename, name, title, lang, uri):
     """Load a taxonomy
     """
@@ -129,7 +129,7 @@ def _add_node(context, tx, node, parent=None, depth = 1):
     if hasattr(node, 'definition') and node.definition:
         description = node.definition
 
-    logger.debug(type(node))
+    # logger.debug(type(node))
     # rdfs:comment print dir(node)
 
     nd = logic.get_action('taxonomy_term_create')(context,  {

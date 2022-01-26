@@ -59,9 +59,9 @@ def cleanup():
 @taxonomy.command()
 @click.option('--url'     , is_flag = False, default = None, help = "URL to a resource")
 @click.option('--filename', is_flag = False, default = None, help = "Path to a file")
-@click.option('--name'    , is_flag = False, default = None, help = "Name of the taxonomy to work with")
+@click.option('--name'    , is_flag = False, default = None, help = "Name of the taxonomy to work with", required = True)
 @click.option('--title'   , is_flag = False, default = None, help = "Title of the taxonomy")
-@click.option('--lang'    , is_flag = False, default = 'en', help = "Language to use when retrieving labels")
+@click.option('--lang'    , is_flag = False, default = 'en', help = "Language to use when retrieving labels. Default is 'en'")
 @click.option('--uri'     , is_flag = False, default = None, help = "The URI of the taxonomy", required = True)
 def load(url, filename, name, title, lang, uri):
     """Load a taxonomy

@@ -24,13 +24,14 @@ setup(
         'python-skos==0.1.1'
     ],
     dependency_links=[
-        'git+https://github.com/datagovuk/python-skos.git#egg=python-skos-0.1.1'
+        'git+https://github.com/ranierigmusella/ckanext-taxonomy#egg=python-skos'
     ],
     entry_points= {
-    'paste.paster_command': [
-        'taxonomy = ckanext.taxonomy.commands:TaxonomyCommand',
-    ],
+
     'ckan.plugins': [
         'taxonomy = ckanext.taxonomy.plugin:TaxonomyPlugin',
     ]}
 )
+    # 'paste.paster_command': [
+    #     'taxonomy = ckanext.taxonomy.commands:TaxonomyCommand',
+    # ],

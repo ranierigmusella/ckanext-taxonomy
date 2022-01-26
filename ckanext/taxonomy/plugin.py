@@ -1,4 +1,5 @@
 from logging import getLogger
+from ckanext.taxonomy.cli import get_commands
 
 import ckan.plugins as p
 
@@ -15,6 +16,11 @@ class TaxonomyPlugin(p.SingletonPlugin):
     p.implements(p.IActions, inherit=True)
     p.implements(p.IAuthFunctions, inherit=True)
     p.implements(p.ITemplateHelpers, inherit=True)
+    p.implements(p.IClick)
+
+    # IClick
+    def get_commands(self):
+        return get_commands()
 
     def before_map(self, map):
         ctrl = 'ckanext.taxonomy.controllers:TaxonomyController'
